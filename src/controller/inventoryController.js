@@ -1,15 +1,15 @@
 
 import * as inventoryService from '../services/inventoryService.js';
 
-const addItemInventory = (req, res) => {
-    const addedItem = inventoryService.addItemInventory();
-    res.send(addedItem);
-};
+// const addItemInventory = (req, res) => {
+//     const addedItem = inventoryService.addItemInventory();
+//     res.send(addedItem);
+// };
 
-const updateItemInventory = (req, res) => {
-    const updatedItem = inventoryService.updateItemInventory();
-    res.send(updateItemInventory);
-}
+// const updateItemInventory = (req, res) => {
+//     const updatedItem = inventoryService.updateItemInventory();
+//     res.send(updateItemInventory);
+// }
 
 const getAllItemsInventory = (req, res) => {
     const items = inventoryService.getAllItemsInventory();
@@ -22,8 +22,8 @@ const deleteItemInventory = (req, res) => {
 }
 
 export {
-    addItemInventory,
-    updateItemInventory,
+    // addItemInventory,
+    // updateItemInventory,
     getAllItemsInventory,
     deleteItemInventory
 }

@@ -1,13 +1,11 @@
 import express from 'express';
-import{ router as inventoryRouter }from './routes/inventoryRouter.js';
+
+import{ router as  inventoryRouter } from './routes/inventoryRouter.js';
 
 
 const server = express();
 
-server.get("/", (req, res) => {
 
-    res.send("login");
-})
 
 server.use("/inventory",inventoryRouter);
 

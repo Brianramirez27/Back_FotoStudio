@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  db-postgres:
+    container_name: db-postgres
+    image: postgres:16.2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: FotoStudio
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: FotoStudio@admin.com
+      PGADMIN_DEFAULT_PASSWORD: FotoStudio
+    ports:
+      - "5050:80"
+    depends_on:
+      - db-postgres
+
+volumes:
+  postgres-data:
