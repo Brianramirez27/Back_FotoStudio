@@ -26,4 +26,4 @@ export {
     // updateItemInventory,
     getAllItemsInventory,
     deleteItemInventory
-}
+};
