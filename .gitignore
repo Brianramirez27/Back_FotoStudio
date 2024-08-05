@@ -1,8 +1,6 @@
 # Ignorar el directorio node_modules
 node_modules/
-
-# Ignorar el archivo de conexión a la base de datos
-C:/Users/jesuc/OneDrive/Escritorio/Back_FotoStudio/src/config/conection_db.js
+./src/config/conection_db.js
 
 # Ignorar archivos de log
 *.log
