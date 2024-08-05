@@ -2,14 +2,15 @@ import express from 'express';
 import cors from 'cors';
 
 import{ router as  inventoryRouter } from './routes/inventoryRouter.js';
- import { router as userRouter } from './routes/userRouter.js';
+ import { router as authenticationRouter } from './routes/authenticationRouter.js';
 
 const server = express();
 
+server.use(express.json());
 server.use(cors());
 
 
-server.use("/user",userRouter);
+server.use("/",authenticationRouter);
 
 server.use("/inventory",inventoryRouter);
 
