@@ -4,6 +4,7 @@ import cryto from 'node:crypto';
 import jwt from 'jsonwebtoken';
 
 import dotenv from 'dotenv';
+
 dotenv.config();
 
 
@@ -13,33 +14,35 @@ const authenticateUser = async (email, password) => {
         const query = await pool.query('SELECT * FROM public.user WHERE user_email = $1', [email]);
 
         if (query.rows.length === 0) {
-            return { error: 'User not found o Email Incorrect' };
+            throw new Error('usuario no encontradoo email incorrecto');
         };
 
         // Si se encuentra el usuario
         const user = query.rows[0];
         const passwordMatch = await bcrypt.compare(password, user.user_password);
-        if (passwordMatch) {
-            const SECRET_KEY  =   process.env.SECRET_KEY;
-    
-            const token = jwt.sign({
-                user_id: user.user_id,
-                user_name: user.user_name,
-                user_first_name: user.user_first_name,
-                user_email: user.user_email,
-                fk_rol_user_user: user.fk_rol_user_user
-            }, SECRET_KEY, { expiresIn: '3h' });
 
-            return {token: token };
-        };
+        if (!passwordMatch) {
+            throw new Error('contraseña incorrecta');
+        }
 
-        // Caso cuando la contraseña es incorrecta
-        return { error: 'Password incorrect' };
+        const SECRET_KEY  =   process.env.SECRET_KEY;
+
+        const token = jwt.sign({
+            user_id: user.user_id,
+            user_name: user.user_name,
+            user_first_name: user.user_first_name,
+            user_email: user.user_email,
+            fk_rol_user_user: user.fk_rol_user_user
+        }, SECRET_KEY, { expiresIn: '1h' });
+
+        return {token: token };
 
     } catch (error) {
-        return { error: error.message };
+        throw new Error(error.message);
     }
 };
+
+
 
 const registerUser = async (email, password, name, firstName,) => {
 

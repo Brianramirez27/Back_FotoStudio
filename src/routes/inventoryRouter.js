@@ -4,13 +4,13 @@ import  * as invetoryController  from '../controller/inventoryController.js';
 
 const router = express.Router();
 
-router.get("/getallitmes",(req,res)=>{
+router.get("/",(req,res)=>{
     res.send("esta es la ruta que creamos");
 })
 
 
 
-router.get("/",invetoryController.getAllItemsInventory);
+// router.get("/",invetoryController.getAllItemsInventory);
 
 // router.post("/",invetoryController.addItemInventory);
 // router.put("/:id", invetoryController.updateItemInventory);
