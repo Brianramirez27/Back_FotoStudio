@@ -23,6 +23,9 @@ async function authenticateUser(req, res) {
     if (password.length < 6) {
       return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres.' });
     }
+
+
+    
     // Autenticación del usuario
     const result = await userService.authenticateUser(email, password);
     return res.status(200).json(result);
@@ -32,7 +35,11 @@ async function authenticateUser(req, res) {
   }
 }
 
+
+
+
 async function registerUser(req, res) {
+
   try {
     const { email, password, name, firstName } = req.body;
     // validaciones de datos se pueden sacar con zod o express validator

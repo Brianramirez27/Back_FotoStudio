@@ -4,16 +4,18 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 function validateToken(req, res, next) {
+  const SECRET_KEY  =   process.env.SECRET_KEY;
     // Obtén el token del header Authorization
     const token = req.headers.authorization?.split(' ')[1]; // 'Bearer TOKEN'
-  
+
+
     if (!token) {
       return res.status(401).json({ status: 'FAILED', message: 'Token no proporcionado' });
     }
   
     try {
       // Decodifica y verifica el token
-      const decodedToken = jwt.verify(token, 'tuClaveSecreta'); // Usa tu clave secreta aquí
+      const decodedToken = jwt.verify(token,SECRET_KEY); // Usa tu clave secreta aquí
   
       // El token es válido; puedes añadir el token decodificado al objeto de solicitud
       req.user = decodedToken; // Puedes agregar información adicional si es necesario

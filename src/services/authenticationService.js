@@ -65,7 +65,7 @@ const registerUser = async (email, password, name, firstName,) => {
                 fk_rol_user_user: 1,
                 created_at: new Date()
             }
-            console.log("el usario si se inserto delsde el servicio")
+            console.log("the user to insert correctting user => ", userRegister);
             return { success: true, user: userRegister };
 
         }
