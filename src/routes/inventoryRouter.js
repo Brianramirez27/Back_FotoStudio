@@ -9,7 +9,7 @@ router.post("/",invetoryController.addItemInventory);
 
 router.get("/",invetoryController.getAllItemsInventoryController);
 
-// router.put("/:id", invetoryController.updateItemInventory);
+router.put("/:id", invetoryController.updateItemInventoryController);
 router.delete("/:id", invetoryController.deleteItemInventoryController);
 
 

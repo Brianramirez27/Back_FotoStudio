@@ -17,14 +17,23 @@ const addItemInventory = async (req, res) => {
 };
 
 
-// const updateItemInventory = (req, res) => {
-//     const updatedItem = inventoryService.updateItemInventory();
-//     res.send(updateItemInventory);
-// }
+const updateItemInventoryController =async (req, res) => {
+
+    try{
+        const productId = req.params.id;
+        const data = req.body;
+        const updatedItem = await inventoryService.updateItemInventoryService({productId, data});
+        return res.status(200).json(updatedItem);
+    }
+    catch(error){
+        return res.status(500).json({ error: error.message });
+    }
+   
+}
 
 const getAllItemsInventoryController =async (req, res) => {
     try{
-
+      
         const items = await inventoryService.getAllItemsInventoryService();
         return res.status(200).json(items);
     }catch(error){
@@ -45,7 +54,7 @@ const deleteItemInventoryController =async (req, res) => {
     }
 }
 
-// esto apsar a otro archivo de servicios que manje las categorias factorizar
+// esto pasar a otro archivo de servicios que maneje las categorias, re factorizar
 const createCategoryInventoryController = async (req, res) => {
 
     try{
@@ -72,9 +81,10 @@ export {
     addItemInventory,
     getAllItemsInventoryController,
     deleteItemInventoryController,
+    updateItemInventoryController,
     // -----------------------------
     getAllCategorysInventoryController,
-    createCategoryInventoryController,
-    // updateItemInventory,
+    createCategoryInventoryController
+   
    
 };
