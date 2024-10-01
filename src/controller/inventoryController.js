@@ -17,7 +17,7 @@ const addItemInventory = async (req, res) => {
 };
 
 
-const updateItemInventoryController =async (req, res) => {
+const updateItemInventoryController = async (req, res) => {
 
     try{
         const productId = req.params.id;

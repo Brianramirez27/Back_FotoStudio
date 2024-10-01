@@ -80,20 +80,20 @@ const getAllItemsInventoryService = async () => {
 
 
 
-const updateItemInventoryService = async ({productId, data }) => {
+const updateItemInventoryService = async ({ productId, data }) => {
     try {
-        const {fk_product_category_product, product_amount, product_cost, product_price} = data;
+        const { fk_product_category_product, product_amount, product_cost, product_price } = data;
 
         const query = await pool.query(
             'UPDATE public.product SET fk_product_category_product = $1, product_amount = $2, product_cost = $3, product_price = $4 WHERE product_id = $5 RETURNING *',
-            [fk_product_category_product, product_amount, product_cost, product_price,productId] 
+            [fk_product_category_product, product_amount, product_cost, product_price, productId] // Asegurarse de que los valores coincidan con los placeholders
         );
 
         if (query.rowCount === 1) {
             const productUpdate = query.rows[0];
             return { success: true, productUpdate };
         } else {
-            return { success: false, message: "Product not found or not updated" };
+            throw new Error('Product not found');
         }
     } catch (error) {
         throw new Error(error.message);
