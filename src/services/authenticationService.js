@@ -8,6 +8,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 
+const getUser = async () => {
+    try {
+        const res = await pool.query('SELECT * FROM public.user');
+        return { users: res.rows };
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+
 const authenticateUser = async (email, password) => {
     try {
         // Ejecutar la consulta
@@ -33,9 +43,9 @@ const authenticateUser = async (email, password) => {
             user_first_name: user.user_first_name,
             user_email: user.user_email,
             fk_rol_user_user: user.fk_rol_user_user
-        }, SECRET_KEY, { expiresIn: '1h' });
+        }, "secret", { expiresIn: '8h' });
 
-        return {token: token };
+        return {token: token, user: user};
 
     } catch (error) {
         throw new Error(error.message);
@@ -81,4 +91,4 @@ const registerUser = async (email, password, name, firstName,) => {
 }
 
 
-export { authenticateUser, registerUser };
+export { authenticateUser, registerUser, getUser};

@@ -1,5 +1,14 @@
 import * as userService from '../services/authenticationService.js';
 
+async function getUsers(req, res) {
+  try {
+    const users = await userService.getUser();
+    return res.status(200).json(users);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
 async function authenticateUser(req, res) {
   try {
     const { email, password } = req.body;
@@ -11,7 +20,7 @@ async function authenticateUser(req, res) {
     }
     
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(email)) { 
       return res.status(400).json({ error: 'El formato del email es inválido.' });
     }
     if (typeof password !== 'string') {
@@ -80,5 +89,6 @@ async function registerUser(req, res) {
 
 export {
   authenticateUser,
-  registerUser
+  registerUser,
+  getUsers
 };

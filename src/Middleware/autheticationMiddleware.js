@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 function validateToken(req, res, next) {
-  const SECRET_KEY  =   process.env.SECRET_KEY;
+  const SECRET_KEY  =   "secret";
     // Obtén el token del header Authorization
     const token = req.headers.authorization?.split(' ')[1]; // 'Bearer TOKEN'
 

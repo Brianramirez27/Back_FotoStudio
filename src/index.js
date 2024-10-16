@@ -4,7 +4,7 @@ import {validateToken }from './Middleware/autheticationMiddleware.js';
 
 import{ router as  inventoryRouter } from './routes/inventoryRouter.js';
 import { router as authenticationRouter } from './routes/authenticationRouter.js';
-
+import { router as salesRouter } from './routes/salesRouter.js';
 const server = express();
 
 server.use(express.json());
@@ -14,6 +14,8 @@ server.use(cors());
 server.use("/",authenticationRouter);
 
 server.use("/inventory",validateToken,inventoryRouter);
+
+server.use("/sales",validateToken,salesRouter);
 
 // server.use("/sales",validateToken,inventoryRouter);
 

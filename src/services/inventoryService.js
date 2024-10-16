@@ -12,7 +12,7 @@ const addItemInventory = async ({ productData }) => {
 
         // Ejecutar la consulta
         const query = await pool.query(
-            'INSERT INTO public.product (product_id,fk_product_category_product, product_amount, product_cost,product_price, created_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            'INSERT INTO public.product (product_id,"fk_product_categoryProduct", product_amount, product_cost,pructo_price, created_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
             [product_id, category_product_id, product_amount, product_cost, product_price, new Date()]
         );
 
@@ -53,17 +53,17 @@ const getAllItemsInventoryService = async () => {
         const query = await pool.query(`
         SELECT 
           product.product_id, 
-          product.product_price, 
+          product.pructo_price, 
           product.product_cost,
           product.product_amount,
           category_product.category_product_name,
-          category_product.category_product_url_img
+          category_product."category_produc_Url_Img"
         FROM 
-          public.product 
+          product 
         INNER JOIN 
-          public.category_product 
+          category_product 
         ON 
-          product.fk_product_category_product = category_product.category_product_id
+          product."fk_product_categoryProduct" = category_product.category_product_id
       `);
        
         if (query.rowCount > 0) {
@@ -85,7 +85,7 @@ const updateItemInventoryService = async ({ productId, data }) => {
         const { fk_product_category_product, product_amount, product_cost, product_price } = data;
 
         const query = await pool.query(
-            'UPDATE public.product SET fk_product_category_product = $1, product_amount = $2, product_cost = $3, product_price = $4 WHERE product_id = $5 RETURNING *',
+            'UPDATE public.product SET "fk_product_categoryProduct" = $1, product_amount = $2, product_cost = $3, pructo_price = $4 WHERE product_id = $5 RETURNING *',
             [fk_product_category_product, product_amount, product_cost, product_price, productId] // Asegurarse de que los valores coincidan con los placeholders
         );
 
@@ -114,7 +114,7 @@ const createCategoryInventoryService = async ({ categoryData }) => {
         const { category_product_name, category_product_url_img } = categoryData;
         const category_product_id = crypto.randomUUID();
         const query = await pool.query(
-            'INSERT INTO public.category_product (category_product_id,category_product_name,category_product_url_img) VALUES ($1, $2, $3) RETURNING *',
+            'INSERT INTO public.category_product (category_product_id,category_product_name,"category_produc_Url_Img") VALUES ($1, $2, $3) RETURNING *',
             [category_product_id, category_product_name, category_product_url_img]
         );
 

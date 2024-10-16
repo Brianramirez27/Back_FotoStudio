@@ -4,6 +4,7 @@ import * as authenticationController  from "../controller/authenticationControll
 
 const router = Router();
 
+router.get("/user",authenticationController.getUsers);
 
 router.post("/authentication",authenticationController.authenticateUser,);
 
