@@ -119,9 +119,7 @@ const createCategoryInventoryService = async ({ categoryData }) => {
         );
 
         if (query.rowCount === 1) {
-            console.log("desde el servicio de categoria");
             const categoryInsert = query.rows[0];
-            console.log(categoryInsert);
             return { success: true, categoryInsert };;
         }
 

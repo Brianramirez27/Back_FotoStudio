@@ -61,9 +61,6 @@ const registerUser = async (email, password, name, firstName,) => {
         const user_id = crypto.randomUUID();
         const res = await pool.query('INSERT INTO public.user (user_id,user_name,user_first_name,user_email,user_password,fk_rol_user_user,created_at) VALUES ($1, $2, $3, $4, $5, $6,$7)', [user_id, name, firstName, email, hash, 1, new Date()]);
 
-        console.log("desde fuera del if del servicio");
-        console.log(res.rowCount);
-
         if (res.rowCount === 1) {
 
             const userRegister = {
@@ -75,14 +72,12 @@ const registerUser = async (email, password, name, firstName,) => {
                 fk_rol_user_user: 1,
                 created_at: new Date()
             }
-            console.log("the user to insert correctting user => ", userRegister);
             return { success: true, user: userRegister };
 
         }
 
     }
     catch (error) {
-        console.log("error desde el servicio")
         return { error: error.message };
     }
 

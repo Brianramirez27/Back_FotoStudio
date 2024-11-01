@@ -32,7 +32,6 @@ const createSale = async ({ saleData }) => {
     try {
         const { sale_user_id, sale_total_price, sales_name_seller, details } = saleData;
 
-        console.log(details);
 
         const sale_id = crypto.randomUUID();
 
@@ -61,7 +60,6 @@ const createSale = async ({ saleData }) => {
         }
 
     } catch (error) {
-        console.log(error.message)
         throw new Error(error.message);
 
     }
@@ -69,53 +67,40 @@ const createSale = async ({ saleData }) => {
 
 const updateSale = async ({ saleId, saleData }) => {
 
+    const { details, deleted, sale_total_price } = saleData
+
     try {
-        const { details, deleted } = saleData
 
+        let dataDeleted = deleted?.map(async (detail) => {
+            return pool.query('DELETE FROM public.sales_details WHERE sales_details_sale_id = $1 AND sales_details_product_id = $2', [saleId, detail.product_id]);
+        })
 
+        await Promise.all(dataDeleted).then((data) => {
+            console.log("deleted")
+        }).catch((e) => {
+            throw new Error(e.message)
+        })
 
+        const dataUpdated = details?.map(async (detail) => {
+            return pool.query('UPDATE public.sales_details SET sales_details_amount = $1 WHERE sales_details_sale_id= $2 AND sales_details_product_id = $3', [detail.sales_details_amount, saleId, detail.product_id]);
+        })
 
-        let total = details?.reduce((acc, product) => {
-            const salesDetailsAmount = Number(product.sales_details_amount) || 0;
-            const productPrice = Number(product.pructo_price) || 0;
-            return acc + (salesDetailsAmount * productPrice);
-        }, 0)
+        await Promise.all(dataUpdated).then((data) => {
+            console.log("updated")
+        }).catch((e) => {
+            throw new Error(e.message)
+        })
 
-        const sale = await pool.query('UPDATE public.sale SET sale_total_price = $1 WHERE sale_id = $2 RETURNING *',
-            [total, saleId]);
+        const query = await pool.query('UPDATE public.sale SET sale_total_price = $1 WHERE sale_id = $2 RETURNING *', [sale_total_price, saleId]);
 
-        if (deleted) {
-            const deleteDetails = deleted.map(detail => {
-                console.log(detail.product_id, detail)
-
-                return pool.query('DELETE FROM public.sales_details WHERE sales_details_sale_id = $1 AND sales_details_product_id = $2', [saleId, detail.product_id]);
-
-            });
-
-            Promise.all(deleteDetails)
-                .catch((e) => {
-                    throw new Error(e.message)
-                })
+        if (query.rowCount === 1) {
+            const sale = query.rows[0];
+            return { success: true, sale };
         }
 
-        if (sale.rowCount === 1) {
-            return { success: true, sale: sale.rows[0] };
-        } else {
-            throw new Error('Sale not found')
-        }
     } catch (error) {
         throw new Error(error.message);
     }
-
-    try {
-
-
-
-
-    } catch (error) {
-
-    }
-
 
 }
 
@@ -130,10 +115,8 @@ const deleteSale = async ({ saleId }) => {
 
         const products = productDetails.rows
 
-        console.log(products)
 
         const restoreProducts = products.map(async (detail) => {
-            console.log(detail)
             return pool.query('UPDATE public.product SET product_amount = product_amount + $1 WHERE product_id = $2', [detail.sales_details_amount, detail.sales_details_product_id]);
         })
 
@@ -145,7 +128,7 @@ const deleteSale = async ({ saleId }) => {
             'DELETE FROM public.sales_details WHERE sales_details_sale_id = $1',
             [sale_id]
         ).catch((e) => {
-            console.log(e)
+            throw new Error(e.message)
         })
 
 

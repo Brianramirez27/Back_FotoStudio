@@ -75,7 +75,6 @@ async function registerUser(req, res) {
 
 
     const result = await userService.registerUser(email, password, name, firstName);
-    console.log(result);
     return res.status(200).send(result);
   }
   catch (error) {
