@@ -74,12 +74,13 @@ JOIN
 JOIN 
     sale s ON s.sale_id = sd.sales_details_sale_id
 WHERE 
-    s.created_at >= $1 AND s.created_at <= $2
+    s.created_at::date BETWEEN $1 AND $2
 GROUP BY 
     p.product_id, cp.category_product_id
 ORDER BY 
     total_units_sold DESC
 LIMIT 1;
+
 
         `, [startDate, endDate]);
 
