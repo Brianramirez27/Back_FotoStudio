@@ -45,6 +45,7 @@ const authenticateUser = async (email, password) => {
             fk_rol_user_user: user.fk_rol_user_user
         }, "secret", { expiresIn: '8h' });
 
+
         return {token: token, user: user};
 
     } catch (error) {

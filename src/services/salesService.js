@@ -32,26 +32,26 @@ const createSale = async ({ saleData }) => {
     try {
         const { sale_user_id, sale_total_price, sales_name_seller, details } = saleData;
 
-
         const sale_id = crypto.randomUUID();
 
         const query = await pool.query('INSERT INTO public.sale (sale_id, sale_user_id, sale_total_price, sales_name_seller, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *', [sale_id, sale_user_id, sale_total_price, sales_name_seller, new Date()]);
-
-        const saleDetails_id = crypto.randomUUID();
-
 
         const salesDetailsQueries = details.map(detail => {
             const saleDetails_id = crypto.randomUUID();
             return pool.query('INSERT INTO public.sales_details (sales_details_id,sales_details_sale_id, sales_details_product_id, sales_details_amount) VALUES ($1, $2, $3, $4)', [saleDetails_id, sale_id, detail.idProduct, detail.amount]);
         });
 
-        await Promise.all(salesDetailsQueries);
+        await Promise.all(salesDetailsQueries).catch(error => {
+            throw new Error(`Error inserting sales details: ${error.message}`);
+        });
 
         const updateProductQueries = details.map(detail => {
             return pool.query('UPDATE public.product SET product_amount = product_amount - $1 WHERE product_id = $2', [detail.amount, detail.idProduct]);
-        })
+        });
 
-        await Promise.all(updateProductQueries);
+        await Promise.all(updateProductQueries).catch(error => {
+            throw new Error(`Error updating product amounts: ${error.message}`);
+        });
 
 
         if (query.rowCount === 1) {
@@ -71,22 +71,18 @@ const updateSale = async ({ saleId, saleData }) => {
 
     try {
 
-        let dataDeleted = deleted?.map(async (detail) => {
-            return pool.query('DELETE FROM public.sales_details WHERE sales_details_sale_id = $1 AND sales_details_product_id = $2', [saleId, detail.product_id]);
+        let dataDeleted = deleted.map(detail => {
+           let product_id = detail.product_id
+            return pool.query('DELETE FROM public.sales_details WHERE sales_details_sale_id = $1 AND sales_details_product_id = $2', [saleId, product_id]);
         })
 
-        await Promise.all(dataDeleted).then((data) => {
-            console.log("deleted")
-        }).catch((e) => {
-            throw new Error(e.message)
-        })
+        await Promise.all(dataDeleted)
 
         const dataUpdated = details?.map(async (detail) => {
             return pool.query('UPDATE public.sales_details SET sales_details_amount = $1 WHERE sales_details_sale_id= $2 AND sales_details_product_id = $3', [detail.sales_details_amount, saleId, detail.product_id]);
         })
 
         await Promise.all(dataUpdated).then((data) => {
-            console.log("updated")
         }).catch((e) => {
             throw new Error(e.message)
         })
