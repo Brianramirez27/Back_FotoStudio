@@ -78,6 +78,12 @@ const updateSale = async ({ saleId, saleData }) => {
 
         await Promise.all(dataDeleted)
 
+        let plusAMount = deleted.map(async (detail) => {
+            return pool.query('UPDATE public.product SET product_amount = product_amount + $1 WHERE product_id = $2', [detail.sales_details_amount, detail.product_id]);
+        })
+
+        await Promise.all(plusAMount)
+
         const dataUpdated = details?.map(async (detail) => {
             return pool.query('UPDATE public.sales_details SET sales_details_amount = $1 WHERE sales_details_sale_id= $2 AND sales_details_product_id = $3', [detail.sales_details_amount, saleId, detail.product_id]);
         })
