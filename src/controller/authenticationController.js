@@ -9,6 +9,7 @@ async function getUsers(req, res) {
   }
 }
 
+
 async function authenticateUser(req, res) {
   try {
     const { email, password } = req.body;

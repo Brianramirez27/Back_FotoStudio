@@ -3,7 +3,7 @@ import * as inventoryService from '../services/inventoryService.js';
 
 
 
- 
+    // Post
 const addItemInventory = async (req, res) => {
     try {
         // despues verificar data para que no pasen datos vacios o incorrectos
@@ -16,7 +16,7 @@ const addItemInventory = async (req, res) => {
 
 };
 
-
+// put
 const updateItemInventoryController = async (req, res) => {
 
     try{
@@ -31,6 +31,7 @@ const updateItemInventoryController = async (req, res) => {
    
 }
 
+// get
 const getAllItemsInventoryController =async (req, res) => {
     try{
       
@@ -42,6 +43,7 @@ const getAllItemsInventoryController =async (req, res) => {
     
 }
 
+// Delet
 const deleteItemInventoryController =async (req, res) => {
     try{
         const productId = req.params.id;
@@ -53,6 +55,13 @@ const deleteItemInventoryController =async (req, res) => {
         return res.status(500).json({ error: error.message });
     }
 }
+
+
+
+
+
+
+
 
 // esto pasar a otro archivo de servicios que maneje las categorias, re factorizar
 const createCategoryInventoryController = async (req, res) => {
@@ -66,6 +75,9 @@ const createCategoryInventoryController = async (req, res) => {
     }
 
 }
+
+
+
 
 const getAllCategorysInventoryController = async (req, res) => {
     try{

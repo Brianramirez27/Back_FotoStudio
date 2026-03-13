@@ -54,7 +54,6 @@ const authenticateUser = async (email, password) => {
 };
 
 
-
 const registerUser = async (email, password, name, firstName,) => {
 
     try {

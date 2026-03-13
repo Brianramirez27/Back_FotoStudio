@@ -10,5 +10,4 @@ router.post("/authentication",authenticationController.authenticateUser,);
 
 router.post("/register",authenticationController.registerUser);
 
-
 export { router };
